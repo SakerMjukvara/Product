@@ -22,7 +22,6 @@ public class Validate {
 			e.printStackTrace();
 		}
 
-
 		//Convert byte[] to String
 		
 		return true;

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Logga in</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+	<h1>Välkommen till produkten produkt</h1>
+	<p>Vänligen logga in för att komma åt sortimentet</p>
+
+	<form action="/login" method="post">
+		<table>
+			<tr>
+				<td>Användarnamn</td>
+				<td><input type="text" name="name"/></td>
+			</tr>
+			<tr>
+				<td>Lösenord</td>
+				<td><input type="password" name="pw"/></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Logga in"/></td>
+			</tr>
+		</table>
+	</form>
+
+</body>
+</html>

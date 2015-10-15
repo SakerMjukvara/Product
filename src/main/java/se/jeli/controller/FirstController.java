@@ -20,4 +20,9 @@ public class FirstController {
 		return "result";
 	}
 	
+	@RequestMapping("/index")
+	public String home(){
+		return "login";
+	}
+	
 }
