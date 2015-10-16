@@ -1,13 +1,13 @@
 package se.jeli.model;
 
-public class ValidateTest {
+public class ValidateOccularTest {
 
 	public static void main(String[] args) {
-
+	
 		Validate validate = new Validate();
-
-		validate.isAuthorized("tester", "test");
-
+		validate.isAuthorized("Tester", "test");
+		
 	}
-
+	
+	
 }
