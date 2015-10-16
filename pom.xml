@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>se.jeli.safety</groupId>
   <artifactId>GoodProduct</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1</version>
   
   	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -49,4 +49,5 @@
 			<url>https://repo.spring.io/libs-release</url>
 		</pluginRepository>
 	</pluginRepositories>
+	<packaging>war</packaging>
 </project>
