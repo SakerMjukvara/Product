@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Resultat</title>
+<title>Butik</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 
-	<p th:text="'Din inloggning fick resultatet ' + ${loginResult}+'!'" />
+	<h1 th:text="'Välkommen till vår butik ' + ${userName}"></h1>
+	<br />
+	<p>Vår produkt är den bästa! Köp den!</p>
+	<br />
+	<form th:action="@{/buy}" method="post">
+
+		<table>
+			<tr>
+				<td>Produkten</td>
+				<td>Antal: <input type="number" name="number" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="Gå till köp" /></td>
+
+			</tr>
+		</table>
+	</form>
+
+	<form th:action="@{/logout}">
+		<input type="submit" value="Logga ut" />
+	</form>
+
 
 </body>
 </html>

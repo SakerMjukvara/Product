@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Order confirmation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Tack för ditt köp</h1>
+
+
+	<table>
+		<tr th:each="attribut : ${attributes}">
+			<td th:text="${attribut.key}"></td>
+			<td th:text="${attribut.value}"></td>
+		</tr>
+	</table>
+
+	<form th:action="@{/logout}">
+		<input type="submit" value="Logga ut" />
+	</form>
+
+</body>
+</html>
