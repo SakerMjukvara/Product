@@ -1,12 +1,5 @@
 package se.jeli.controller;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +7,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
+import se.jeli.model.User;
 import se.jeli.model.Validate;
 
+/**
+ * Controller for logging and redirecting
+ * 
+ * @author Lina
+ *
+ */
 @Controller
+@SessionAttributes({ "userName", "loggedIn" })
 public class FirstController {
 
 	private Validate validate;
@@ -28,53 +30,99 @@ public class FirstController {
 
 	}
 
+	/**
+	 * 
+	 * @param name
+	 *            - userName
+	 * @param pw
+	 *            - password
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(String name, String pw, Model model) {
 
 		boolean authorized = validate.isAuthorized(name, pw);
 
-		if (authorized) {
-			model.addAttribute("userName", name);
-			return "result";
+		if (!authorized) {
+			model.addAttribute("loggedIn", "false");
+			model.addAttribute("error", "Fel inloggningsuppgifter.");
+			return home();
 		}
 
-		model.addAttribute("loginStatus", "Login misslyckades");
+		model.addAttribute("userName", name);
+		model.addAttribute("loggedIn", "true");
+		return "result";
+
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String register(String name, String pw, Model model) {
+
+		char[] charArray = name.toCharArray();
+		for (Character c : charArray) {
+			if (!Character.isAlphabetic(c)) {
+				if (!Character.isDigit(c)) {
+					model.addAttribute("loggedIn", "false");
+					model.addAttribute("error", "Kombinationen av användarnamn och lösenord är ej tillåten.");
+					return home();
+				}
+			}
+		}
+
+		User user = new User(name, pw);
+		// TODO: Spara i databasen
+		model.addAttribute("success", "Din nya användare är registrerad, vänligen logga in med den.");
 		return home();
 
 	}
 
 	@RequestMapping(value = "/buy", method = RequestMethod.POST)
-	public String buy(int number, Model model, HttpServletRequest httpSession) {
-		Enumeration<String> attributeNames = httpSession.getAttributeNames();
-		Map<String, Object> attributes = new HashMap<>();
-		while (attributeNames.hasMoreElements()) {
-
-			String nextElement = attributeNames.nextElement();
-			Object attribute = httpSession.getAttribute(nextElement);
-			attributes.put(nextElement, attribute);
+	public String buy(int number, Model model, HttpSession httpSession) {
+		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+			model.addAttribute("error", "Du har inte loggat in.");
+			return home();
 		}
-
-		model.addAttribute("attributes", attributes);
 		model.addAttribute("number", number);
-
 		return "order";
 	}
 
-	@RequestMapping(value = "confirmation")
-	public String confirmation(HttpSession httpSession){
-		
-		
+	@RequestMapping(value = "/buy", method = RequestMethod.GET)
+	public String buy(Model model, HttpSession httpSession) {
+		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+			model.addAttribute("error", "Du har inte loggat in.");
+			return home();
+		}
+		return "result";
+	}
+
+	@RequestMapping(value = "/confirmation")
+	public String confirmation(HttpSession httpSession, Model model) {
+		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+			model.addAttribute("error", "Du har inte loggat in.");
+			return home();
+		}
 		return "confirmation";
 	}
-	
-	@RequestMapping("/logout")
-	public String logout() {
+
+	@RequestMapping(value = "/logout")
+	public String logout(Model model) {
+		model.addAttribute("loggedIn", "false");
 		return home();
 	}
 
-	@RequestMapping("/")
+	@RequestMapping(value = "/result")
+	public String result(HttpSession httpSession, Model model) {
+
+		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+			model.addAttribute("error", "Du har inte loggat in.");
+			return home();
+		}
+		return "result";
+	}
+
+	@RequestMapping(value = "/")
 	public String home() {
 		return "index";
 	}
-
 }

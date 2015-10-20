@@ -6,7 +6,7 @@
 </head>
 <body>
 	<p
-		th:text="'Du har lagt en order på ' + ${number} + ' av Produkten. Betala nedan tack!'" />
+		th:text="${userName}+' har lagt en order på ' + ${number} + ' av Produkten. Vänligen betala nedan!'" />
 
 	<script charset="UTF-8"
 		src="https://ssl.ditonlinebetalingssystem.dk/integration/ewindow/paymentwindow.js"
