@@ -9,13 +9,16 @@ private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz12345678
 private UserService userService; 
 	
 	
-	public void createUsr(String name, String pw) {
+	public boolean createUsr(String name, String pw) {
+		boolean created = false;
 		
-		LoginUser loginUser = new LoginUser(name, pw);
 		
 		if (checkChars(name) & checkChars(pw)== true){
+			LoginUser loginUser = new LoginUser(name, pw);
 			userService.insertUser(loginUser);
+			created = true;
 		}
+		return created;
 		
 	}
 	
