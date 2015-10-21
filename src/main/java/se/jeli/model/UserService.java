@@ -41,6 +41,10 @@ public class UserService {
 
 		List<LoginUser> findByName = repository.findByName(userName);
 
+		if (findByName.isEmpty()) {
+			return null;
+		}
+		
 		return findByName.get(0);
 
 	}
