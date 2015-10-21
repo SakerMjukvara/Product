@@ -1,9 +1,7 @@
 package se.jeli.model;
 
 import javax.persistence.*;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
+
 
 @Entity
 public class User {
@@ -12,17 +10,16 @@ public class User {
   @GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private String name;
-	private String pw;
-	private String userHash;
+	private String userHashPw;
 	private String userSalt;
 	
 	public User(){
 		
 	}
 	
-	public User(String name, String pw) {
+	public User(String name, String userHashPw) {
 		this.name = name;
-		this.pw = pw;
+		this.userHashPw = userHashPw;
 	}
 
 	public String getName() {
@@ -33,20 +30,12 @@ public class User {
 		this.name = name;
 	}
 
-	public String getPw() {
-		return pw;
+	public String getuserHashPw() {
+		return userHashPw;
 	}
 
-	public void setPw(String pw) {
-		this.pw = pw;
-	}
-
-	public String getUserHash() {
-		return userHash;
-	}
-
-	public void setUserHash(String userHash) {
-		this.userHash = userHash;
+	public void setPw(String userHashPw) {
+		this.userHashPw = userHashPw;
 	}
 
 	public String getUserSalt() {

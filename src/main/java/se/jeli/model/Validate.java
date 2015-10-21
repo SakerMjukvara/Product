@@ -3,8 +3,11 @@ package se.jeli.model;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import org.springframework.stereotype.Component;
+
+
+
+
 
 @Component
 public class Validate {
@@ -25,8 +28,13 @@ public class Validate {
 		return isPwCorrect;
 	}
 
+	
+		
+
+	
 	private boolean userNameIsInDB(String enteredUserName) {
 		// TODO: Create connection to db here
+		
 		return TESTNAME.equals(enteredUserName);
 	}
 
