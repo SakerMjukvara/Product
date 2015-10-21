@@ -3,32 +3,44 @@
 <head>
 <title>Butik</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="../static/css/product.css" th:href="@{css/product.css}"
+	rel="stylesheet" media="screen" />
 </head>
 <body>
+	<div class="header aside">
+		<h1>Produkten produkt</h1>
+	</div>
+	<div class="row aside">
+		<div class="col-12">
+			<h2 th:text="'Välkommen till vår butik ' + ${userName}"></h2>
+			<h3>Vår produkt är den bästa! Köp den!</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<form th:action="@{/buy}" method="post">
+				<table>
+					<tr>
+						<th>Produkt</th>
+						<th>Antal</th>
+						<th></th>
+					</tr>
+					<tr>
+						<td>Produkten</td>
+						<td><input type="number" name="number" /></td>
+						<td><input type="submit" value="Gå till köp" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
 
-	<h1 th:text="'Välkommen till vår butik ' + ${userName}"></h1>
-	<br />
-	<p>Vår produkt är den bästa! Köp den!</p>
-	<br />
-	<form th:action="@{/buy}" method="post">
-
-		<table>
-			<tr>
-				<td>Produkten</td>
-				<td>Antal: <input type="number" name="number" /></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><input type="submit" value="Gå till köp" /></td>
-
-			</tr>
-		</table>
-	</form>
-
-	<form th:action="@{/logout}">
-		<input type="submit" value="Logga ut" />
-	</form>
-
-
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<form th:action="@{/logout}">
+				<input type="submit" value="Logga ut" />
+			</form>
+		</div>
+	</div>
 </body>
 </html>

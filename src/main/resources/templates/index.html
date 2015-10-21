@@ -3,44 +3,65 @@
 <head>
 <title>Logga in</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="../static/css/product.css" th:href="@{css/product.css}"
+	rel="stylesheet" media="screen" />
+
 </head>
 <body>
-
-	<h1>Välkommen till produkten produkt</h1>
-	<p>Vänligen logga in för att komma åt sortimentet</p>
-
-	<form th:action="@{/login}" method="post">
-		<table>
-			<tr>
-				<td>Användarnamn</td>
-				<td><input type="text" name="name" /></td>
-			</tr>
-			<tr>
-				<td>Lösenord</td>
-				<td><input type="password" name="pw" /></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Logga in" /></td>
-			</tr>
-		</table>
-	</form>
-
-	<form th:action="@{/register}" method="post">
-		<table>
-			<tr>
-				<td>Användarnamn</td>
-				<td><input type="text" name="name" /></td>
-			</tr>
-			<tr>
-				<td>Lösenord</td>
-				<td><input type="password" name="pw" /></td>
-			</tr>
-			<tr>
-				<td><input type="submit" value="Logga in" /></td>
-			</tr>
-		</table>
-	</form>
-	<p th:text="${error}" />
-	<p th:text="${success}" />
+	<div class="header aside">
+		<h1>Välkommen till produkten produkt</h1>
+	</div>
+	<div class="row aside">
+		<div class="col-12">
+			<h2>Vänligen logga in för att komma åt sortimentet</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-6">
+			<p>Logga in</p>
+			<form th:action="@{/login}" method="post">
+				<table>
+					<tr>
+						<td>Användarnamn</td>
+						<td><input type="text" name="name" /></td>
+					</tr>
+					<tr>
+						<td>Lösenord</td>
+						<td><input type="password" name="pw" /></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Logga in" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="col-6">
+			<p>Registrera ny användare</p>
+			<form th:action="@{/register}" method="post">
+				<table>
+					<tr>
+						<td>Användarnamn</td>
+						<td><input type="text" name="name" id="newName" /></td>
+						<td id="allowedSigns"></td>
+					</tr>
+					<tr>
+						<td>Lösenord</td>
+						<td><input type="password" name="pw" id="newPw" /></td>
+						<td id="notAllowedPassword"></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Registrera" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12 aside">
+			<p th:text="${error}" style="background-color: red;" />
+			<p th:text="${success}" style="background-color: green;" />
+		</div>
+	</div>
 </body>
 </html>
