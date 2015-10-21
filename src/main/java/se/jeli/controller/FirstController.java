@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import se.jeli.model.CreateUser;
 import se.jeli.model.Validate;
 
 /**
@@ -22,22 +23,20 @@ import se.jeli.model.Validate;
 public class FirstController {
 
 	private Validate validate;
-
+	@Autowired
+	private CreateUser createUser;
 	@Autowired
 	public FirstController(Validate validate) {
 		this.validate = validate;
 
 	}
 
-	/**
-	 * 
-	 * @param name
-	 *            - userName
-	 * @param pw
-	 *            - password
-	 * @param model
-	 * @return
-	 */
+	@RequestMapping(value = "/")
+	public String home() {
+
+		return "index";
+	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(String name, String pw, Model model) {
 
@@ -58,7 +57,7 @@ public class FirstController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(String name, String pw, Model model) {
 
-		boolean success = validate.validUser(name, pw);
+		boolean success = createUser.createUsr(name, pw);
 
 		if (!success) {
 			model.addAttribute("loggedIn", "false");
@@ -73,7 +72,7 @@ public class FirstController {
 
 	@RequestMapping(value = "/buy", method = RequestMethod.POST)
 	public String buy(int number, Model model, HttpSession httpSession) {
-		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+		if (isSessionNotLoggedIn(httpSession)) {
 			model.addAttribute("error", "Du har inte loggat in.");
 			return home();
 		}
@@ -83,16 +82,17 @@ public class FirstController {
 
 	@RequestMapping(value = "/buy", method = RequestMethod.GET)
 	public String buy(Model model, HttpSession httpSession) {
-		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+		if (isSessionNotLoggedIn(httpSession)) {
 			model.addAttribute("error", "Du har inte loggat in.");
 			return home();
 		}
+
 		return "result";
 	}
 
 	@RequestMapping(value = "/confirmation")
 	public String confirmation(HttpSession httpSession, Model model) {
-		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+		if (isSessionNotLoggedIn(httpSession)) {
 			model.addAttribute("error", "Du har inte loggat in.");
 			return home();
 		}
@@ -108,16 +108,14 @@ public class FirstController {
 	@RequestMapping(value = "/result")
 	public String result(HttpSession httpSession, Model model) {
 
-		if (((String) httpSession.getAttribute("loggedIn")).equals("false")) {
+		if (isSessionNotLoggedIn(httpSession)) {
 			model.addAttribute("error", "Du har inte loggat in.");
 			return home();
 		}
 		return "result";
 	}
 
-	@RequestMapping(value = "/")
-	public String home() {
-		validate.extracted();
-		return "index";
+	private boolean isSessionNotLoggedIn(HttpSession httpSession) {
+		return ((String) httpSession.getAttribute("loggedIn")).equals("false");
 	}
 }
