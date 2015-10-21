@@ -12,7 +12,7 @@ public class Validate {
 
 	private static final String TESTNAME = "tester";
 	private static final String TESTPW = "test";
-	private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
+	//private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
 	private static final String testPwHash = initate(TESTPW);
 
 	UserService userService;
@@ -107,25 +107,6 @@ public class Validate {
 		return "fattas";
 	}
 
-	public boolean validUser(String name, String pw) {
-
-		for (int i = 0; i < ACCEPTED_SIGNS.toCharArray().length; i++) {
-
-		}
-
-		char[] charArray = name.toCharArray();
-		for (Character c : charArray) {
-			if (!Character.isAlphabetic(c)) {
-				if (!Character.isDigit(c)) {
-					return false;
-				}
-			}
-		}
-
-		// TODO: whitelist även för pw
-		// User user = new User(name, pw);
-		// TODO: Spara i databasen
-		return true;
-	}
+	
 
 }
