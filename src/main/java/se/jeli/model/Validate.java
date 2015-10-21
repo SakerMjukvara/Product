@@ -3,6 +3,7 @@ package se.jeli.model;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class Validate {
 	//private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
 	private static final String testPwHash = initate(TESTPW);
 
-	UserService userService;
+	private UserService userService;
 
 	@Autowired
 	public Validate(UserService userService) {
@@ -26,13 +27,13 @@ public class Validate {
 		LoginUser user = new LoginUser(TESTNAME, testPwHash);
 		user.setUserSalt("2");
 		userService.insertUser(user);
-		System.out.println("USER: "+ user.getName());
-		
+		System.out.println("USER: " + user.getName());
+
 		LoginUser user2 = new LoginUser("jesper", initate("pw"));
 		user2.setUserSalt("2");
 		userService.insertUser(user2);
-		System.out.println("USER Jesper "+ user2.getName());
-		userService.findAll().forEach(u-> System.out.println(user.getName()));
+		System.out.println("USER Jesper " + user2.getName());
+		userService.findAll().forEach(u -> System.out.println(user.getName()));
 	}
 
 	public boolean isAuthorized(String enteredUserName, String pwToCheck) {
@@ -48,12 +49,15 @@ public class Validate {
 	}
 
 	private boolean userNameIsInDB(String enteredUserName) {
-		// TODO: Create connection to db here
-		LoginUser findUser = userService.findUser(enteredUserName);
-		// return TESTNAME.equals(enteredUserName);
-		if (findUser != null) {
-			return true;
+
+		List<LoginUser> allUsers = userService.findAll();
+		
+		for (LoginUser userFromDb : allUsers) {
+			if (userFromDb.getName().equals(enteredUserName)) {
+				return true;
+			}
 		}
+
 		return false;
 	}
 
@@ -61,6 +65,7 @@ public class Validate {
 
 		try {
 			String hashedPW = hashString(pwToCheck);
+
 			System.out.println(pwToCheck + " " + hashedPW);
 
 			if (testPwHash.equals(hashedPW)) {
