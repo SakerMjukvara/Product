@@ -3,23 +3,42 @@ package se.jeli.model;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-
-
-
 
 @Component
 public class Validate {
 
 	private static final String TESTNAME = "tester";
 	private static final String TESTPW = "test";
-
+	private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
 	private static final String testPwHash = initate(TESTPW);
+
+	UserService userService;
+
+	@Autowired
+	public Validate(UserService userService) {
+		this.userService = userService;
+	}
+
+	public void extracted() {
+		LoginUser user = new LoginUser(TESTNAME, testPwHash);
+		user.setUserSalt("2");
+		userService.insertUser(user);
+		System.out.println("USER: "+ user.getName());
+		
+		LoginUser user2 = new LoginUser("jesper", initate("pw"));
+		user2.setUserSalt("2");
+		userService.insertUser(user2);
+		System.out.println("USER Jesper "+ user2.getName());
+		userService.findAll().forEach(u-> System.out.println(user.getName()));
+	}
 
 	public boolean isAuthorized(String enteredUserName, String pwToCheck) {
 
 		if (!userNameIsInDB(enteredUserName)) {
+			System.out.println(enteredUserName);
 			return false;
 		}
 
@@ -28,14 +47,14 @@ public class Validate {
 		return isPwCorrect;
 	}
 
-	
-		
-
-	
 	private boolean userNameIsInDB(String enteredUserName) {
 		// TODO: Create connection to db here
-		
-		return TESTNAME.equals(enteredUserName);
+		LoginUser findUser = userService.findUser(enteredUserName);
+		// return TESTNAME.equals(enteredUserName);
+		if (findUser != null) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean validatePassword(String pwToCheck) {
@@ -86,6 +105,27 @@ public class Validate {
 			e.printStackTrace();
 		}
 		return "fattas";
+	}
+
+	public boolean validUser(String name, String pw) {
+
+		for (int i = 0; i < ACCEPTED_SIGNS.toCharArray().length; i++) {
+
+		}
+
+		char[] charArray = name.toCharArray();
+		for (Character c : charArray) {
+			if (!Character.isAlphabetic(c)) {
+				if (!Character.isDigit(c)) {
+					return false;
+				}
+			}
+		}
+
+		// TODO: whitelist även för pw
+		// User user = new User(name, pw);
+		// TODO: Spara i databasen
+		return true;
 	}
 
 }

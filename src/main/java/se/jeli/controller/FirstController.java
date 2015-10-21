@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import se.jeli.model.User;
 import se.jeli.model.Validate;
 
 /**
@@ -59,19 +58,14 @@ public class FirstController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(String name, String pw, Model model) {
 
-		char[] charArray = name.toCharArray();
-		for (Character c : charArray) {
-			if (!Character.isAlphabetic(c)) {
-				if (!Character.isDigit(c)) {
-					model.addAttribute("loggedIn", "false");
-					model.addAttribute("error", "Kombinationen av användarnamn och lösenord är ej tillåten.");
-					return home();
-				}
-			}
+		boolean success = validate.validUser(name, pw);
+
+		if (!success) {
+			model.addAttribute("loggedIn", "false");
+			model.addAttribute("error", "Kombinationen av användarnamn och lösenord är ej tillåten.");
+			return home();
 		}
 
-		User user = new User(name, pw);
-		// TODO: Spara i databasen
 		model.addAttribute("success", "Din nya användare är registrerad, vänligen logga in med den.");
 		return home();
 
@@ -123,6 +117,7 @@ public class FirstController {
 
 	@RequestMapping(value = "/")
 	public String home() {
+		validate.extracted();
 		return "index";
 	}
 }

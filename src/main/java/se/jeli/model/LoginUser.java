@@ -2,22 +2,22 @@ package se.jeli.model;
 
 import javax.persistence.*;
 
-
 @Entity
-public class User {
+@Table(name="loginuser")
+public class LoginUser {
 
 	@Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue()
 	private long id;
 	private String name;
 	private String userHashPw;
 	private String userSalt;
-	
-	public User(){
-		
+
+	public LoginUser() {
+
 	}
-	
-	public User(String name, String userHashPw) {
+
+	public LoginUser(String name, String userHashPw) {
 		this.name = name;
 		this.userHashPw = userHashPw;
 	}
@@ -45,8 +45,5 @@ public class User {
 	public void setUserSalt(String userSalt) {
 		this.userSalt = userSalt;
 	}
-	
-	
-	
-}
 
+}
