@@ -13,54 +13,85 @@ import se.jeli.model.CreateUser;
 import se.jeli.model.Validate;
 
 /**
- * Controller for logging and redirecting
+ * Controller for all subpages of this application. For logging in, out,
+ * register new user, buying products. It is using Spring MVC with SpringBoot
+ * and thymeleaf.
  * 
  * @author Lina
- *
+ * 
  */
 @Controller
 @SessionAttributes({ "userName", "loggedIn" })
 public class FirstController {
 
+	@Autowired
 	private Validate validate;
 	@Autowired
 	private CreateUser createUser;
-	@Autowired
-	public FirstController(Validate validate) {
-		this.validate = validate;
 
-	}
-
+	/**
+	 * Will return the user to homepage of the application
+	 * 
+	 * @return "index" for the homepage.
+	 */
 	@RequestMapping(value = "/")
 	public String home() {
 
 		return "index";
 	}
 
+	/**
+	 * login Method is called when user tries to login to the application. If
+	 * the user is authorized it returns "result" otherwise back to hompage
+	 * "index".
+	 * 
+	 * @param name
+	 *            - username form form in html page
+	 * @param pw
+	 *            - pw from form in html page
+	 * @param model
+	 * @param session
+	 * @return "result" if the user is authorized it otherwise returns back to
+	 *         hompage "index".
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(String name, String pw, Model model) {
+	public String login(String name, String pw, Model model, HttpSession session) {
 
 		boolean authorized = validate.isAuthorized(name, pw);
 
 		if (!authorized) {
-			model.addAttribute("loggedIn", "false");
+			session.setAttribute("loggedIn", false);
+			session.invalidate();
 			model.addAttribute("error", "Fel inloggningsuppgifter.");
 			return home();
 		}
 
+		session.setAttribute("loggedIn", true);
 		model.addAttribute("userName", name);
-		model.addAttribute("loggedIn", "true");
 		return "result";
 
 	}
 
+	/**
+	 * Method for registration of new users.
+	 * 
+	 * @param name
+	 *            from form in html page
+	 * @param pw
+	 *            from form in html page
+	 * @param model
+	 * @param session
+	 * @return to homepage with result if the registration was successful or
+	 *         not.
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String register(String name, String pw, Model model) {
+	public String register(String name, String pw, Model model, HttpSession session) {
 
 		boolean success = createUser.createUsr(name, pw);
 
 		if (!success) {
-			model.addAttribute("loggedIn", "false");
+			session.setAttribute("loggedIn", false);
+			session.invalidate();
 			model.addAttribute("error", "Kombinationen av användarnamn och lösenord är ej tillåten.");
 			return home();
 		}
@@ -70,52 +101,53 @@ public class FirstController {
 
 	}
 
+	/**
+	 * Method when the user has entered an amount of products to buy.
+	 * 
+	 * @param number
+	 *            from form in the html page
+	 * @param model
+	 * @param session
+	 * @return "order" which is the page where epay is integrated
+	 */
 	@RequestMapping(value = "/buy", method = RequestMethod.POST)
-	public String buy(int number, Model model, HttpSession httpSession) {
-		if (isSessionNotLoggedIn(httpSession)) {
-			model.addAttribute("error", "Du har inte loggat in.");
-			return home();
-		}
+	public String buy(int number, Model model, HttpSession session) {
 		model.addAttribute("number", number);
 		return "order";
 	}
 
-	@RequestMapping(value = "/buy", method = RequestMethod.GET)
-	public String buy(Model model, HttpSession httpSession) {
-		if (isSessionNotLoggedIn(httpSession)) {
-			model.addAttribute("error", "Du har inte loggat in.");
-			return home();
-		}
-
-		return "result";
-	}
-
 	@RequestMapping(value = "/confirmation")
 	public String confirmation(HttpSession httpSession, Model model) {
-		if (isSessionNotLoggedIn(httpSession)) {
-			model.addAttribute("error", "Du har inte loggat in.");
-			return home();
-		}
+
+		// TODO: Här är det tänkt att vi ska hantera svar från epay
 		return "confirmation";
 	}
 
+	/**
+	 * Method to log the user out.
+	 * 
+	 * @param model
+	 * @param session
+	 * @return "index" homepage
+	 */
 	@RequestMapping(value = "/logout")
-	public String logout(Model model) {
-		model.addAttribute("loggedIn", "false");
+	public String logout(Model model, HttpSession session) {
+		session.setAttribute("loggedIn", false);
+		session.invalidate();
 		return home();
 	}
 
-	@RequestMapping(value = "/result")
-	public String result(HttpSession httpSession, Model model) {
-
-		if (isSessionNotLoggedIn(httpSession)) {
-			model.addAttribute("error", "Du har inte loggat in.");
-			return home();
-		}
-		return "result";
-	}
-
-	private boolean isSessionNotLoggedIn(HttpSession httpSession) {
-		return ((String) httpSession.getAttribute("loggedIn")).equals("false");
-	}
+	//OKLART OM NEDAN ANVÄNDS BORTKOMMENTERAT SÅ LÄNGE
+//	/**
+//	 * Method that wi
+//	 * 
+//	 * @param session
+//	 * @param model
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/result", method = RequestMethod.POST)
+//	public String result(HttpSession session, Model model) {
+//
+//		return "result";
+//	}
 }

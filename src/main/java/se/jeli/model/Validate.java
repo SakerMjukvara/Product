@@ -12,8 +12,6 @@ public class Validate {
 
 	private static final String TESTNAME = "tester";
 	private static final String TESTPW = "test";
-	// private static final String ACCEPTED_SIGNS =
-	// "abcdefghijklmnopqrstuvwxyz1234567890";
 	private static final String testPwHash = initate(TESTPW);
 	private UserService userService;
 
@@ -21,6 +19,7 @@ public class Validate {
 	public Validate(UserService userService) {
 		this.userService = userService;
 	}
+
 	// Don't know if I should change this.
 	public void extracted() {
 		LoginUser user = new LoginUser(TESTNAME, testPwHash);
@@ -65,18 +64,19 @@ public class Validate {
 
 		try {
 
-			//String hashedPW = Digester.hashString(pwToCheck);
-			
-			// Get salt from db and create hashed pw to check
-			String hashedPW = Digester.hashString(pwToCheck + userService.findUser(enteredUserName).getUserSalt());
+			// String hashedPW = Digester.hashString(pwToCheck);
 
-			System.out.println(pwToCheck + " " + hashedPW);
+			// Get salt from db and create hashed pw to check
 
 			List<LoginUser> allUsers = userService.findAll();
 
 			for (LoginUser userFromDb : allUsers) {
 				if (userFromDb.getName().equals(enteredUserName)) {
-					System.out.println("hittat användaren");
+					String userSalt = userService.findUser(enteredUserName).getUserSalt();
+					String hashedPW = Digester
+							.hashString(pwToCheck + userSalt);
+					System.out.println(pwToCheck + " " + hashedPW);
+					System.out.println("hittat användaren och salt"+userSalt);
 					System.out.println(userFromDb.getuserHashPw());
 					if (userFromDb.getuserHashPw().equals(hashedPW)) {
 						System.out.println("hittat lösenordet");

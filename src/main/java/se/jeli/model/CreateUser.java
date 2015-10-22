@@ -8,18 +8,17 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class CreateUser {
 
 	private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
 	@Autowired
-	 private UserService userService;
+	private UserService userService;
 
 	public boolean createUsr(String name, String pw) {
 		boolean created = false;
 
-		if (checkChars(name) & checkChars(pw) == true & checkUserName(name) == true) {
+		if (checkChars(name) & checkChars(pw) == true & checkUserName(name) == false) {
 			// Create hashed pw here with salt
 			LoginUser loginUser = new LoginUser(name, pw);
 			String salted;
@@ -29,8 +28,8 @@ public class CreateUser {
 				String hashedPw = createHashedPw(pw, salted);
 				loginUser.setuserHashPw(hashedPw);
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("något gick fel med hashningen av lösenordet");
 			}
 
 			userService.insertUser(loginUser);
@@ -61,9 +60,14 @@ public class CreateUser {
 	private boolean checkUserName(String name) {
 		boolean userExist = false;
 
-		if (userService.findUser(name).getName().length() > 0) {
-			userExist = true;
+		LoginUser findUser = userService.findUser(name);
+
+		if (findUser != null) {
+			return true;
 		}
+		// if (findUser.getName().length() > 0) {
+		// userExist = true;
+		// }
 		// Send back text to web?????
 		return userExist;
 	}
@@ -77,15 +81,12 @@ public class CreateUser {
 
 	private static String createHashedPw(String pw, String salted) {
 		String hashedPW = null;
-		String toHash = salted + pw;
+		String toHash = pw + salted;
 		try {
 			hashedPW = Digester.hashString(toHash);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
+		} catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("något har gått fel vid hashningen");
 		}
 
 		return hashedPW;
