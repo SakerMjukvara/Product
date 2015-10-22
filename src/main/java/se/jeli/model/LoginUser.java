@@ -3,7 +3,7 @@ package se.jeli.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="loginuser")
+@Table(name = "loginuser")
 public class LoginUser {
 
 	@Id
@@ -34,7 +34,7 @@ public class LoginUser {
 		return userHashPw;
 	}
 
-	public void setPw(String userHashPw) {
+	public void setuserHashPw(String userHashPw) {
 		this.userHashPw = userHashPw;
 	}
 

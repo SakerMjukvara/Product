@@ -17,7 +17,6 @@ public class Validate {
 	private static final String testPwHash = initate(TESTPW);
 	private UserService userService;
 
-
 	@Autowired
 	public Validate(UserService userService) {
 		this.userService = userService;
@@ -54,7 +53,7 @@ public class Validate {
 
 		for (LoginUser userFromDb : allUsers) {
 			if (userFromDb.getName().equals(enteredUserName)) {
-				
+
 				return true;
 			}
 		}
@@ -87,13 +86,11 @@ public class Validate {
 
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			
+
 			// TODO: Errorhandling
 			return false;
 		}
 	}
-
-	
 
 	/**
 	 * Method only for passing first step with hardcoded username & pw

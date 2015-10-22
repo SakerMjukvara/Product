@@ -16,15 +16,15 @@ public class UserService {
 	public UserService(UserRepository repository) {
 		this.repository = repository;
 	}
-	
+
 	// Insert new user into DB
 	public void insertUser(LoginUser user) {
 		repository.save(user);
 
 	}
-	
-	public List<LoginUser> findAll(){
-		return (List<LoginUser>)repository.findAll();
+
+	public List<LoginUser> findAll() {
+		return (List<LoginUser>) repository.findAll();
 	}
 
 	// Fetch user from db. Get user object from DB OR look below for getting
@@ -36,7 +36,7 @@ public class UserService {
 		return user;
 
 	}
-	
+
 	public LoginUser findUser(String userName) {
 
 		List<LoginUser> findByName = repository.findByName(userName);
@@ -44,7 +44,7 @@ public class UserService {
 		if (findByName.isEmpty()) {
 			return null;
 		}
-		
+
 		return findByName.get(0);
 
 	}
