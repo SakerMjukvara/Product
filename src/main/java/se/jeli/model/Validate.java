@@ -21,7 +21,7 @@ public class Validate {
 	public Validate(UserService userService) {
 		this.userService = userService;
 	}
-
+	// Don't know if I should change this.
 	public void extracted() {
 		LoginUser user = new LoginUser(TESTNAME, testPwHash);
 		user.setUserSalt("2");
@@ -65,7 +65,10 @@ public class Validate {
 
 		try {
 
-			String hashedPW = Digester.hashString(pwToCheck);
+			//String hashedPW = Digester.hashString(pwToCheck);
+			
+			// Get salt from db and create hashed pw to check
+			String hashedPW = Digester.hashString(pwToCheck + userService.findUser(enteredUserName).getUserSalt());
 
 			System.out.println(pwToCheck + " " + hashedPW);
 

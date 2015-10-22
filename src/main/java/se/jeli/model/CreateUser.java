@@ -6,12 +6,15 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+
+@Component
 public class CreateUser {
 
 	private static final String ACCEPTED_SIGNS = "abcdefghijklmnopqrstuvwxyz1234567890";
 	@Autowired
-	private UserService userService;
+	 private UserService userService;
 
 	public boolean createUsr(String name, String pw) {
 		boolean created = false;
@@ -58,7 +61,7 @@ public class CreateUser {
 	private boolean checkUserName(String name) {
 		boolean userExist = false;
 
-		if (userService.findUser(name).equals(null)) {
+		if (userService.findUser(name).getName().length() > 0) {
 			userExist = true;
 		}
 		// Send back text to web?????
