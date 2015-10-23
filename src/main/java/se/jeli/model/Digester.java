@@ -13,6 +13,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class Digester {
 
+	/**
+	 * Uses MessageDigest to generate a hash for the pw.
+	 * 
+	 * @param pwToCheck
+	 * @return the hashed pw
+	 * @throws UnsupportedEncodingException
+	 * @throws NoSuchAlgorithmException
+	 */
 	public static String hashString(String pwToCheck) throws UnsupportedEncodingException, NoSuchAlgorithmException {
 
 		MessageDigest digester = MessageDigest.getInstance("SHA-256");

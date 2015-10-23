@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Validate {
 
-//	private static final String TESTNAME = "tester";
-//	private static final String TESTPW = "test";
-//	private static final String testPwHash = initate(TESTPW);
 	private UserService userService;
 
 	@Autowired
@@ -20,6 +17,16 @@ public class Validate {
 		this.userService = userService;
 	}
 
+	/**
+	 * This method validates that the enteredUserName and pw exists and matches.
+	 * So that the pw belongs to the user.
+	 * 
+	 * 
+	 * @param enteredUserName
+	 * @param pwToCheck
+	 * @return true if the username Exists and the hashed PW is equal to the
+	 *         saved hashed PW. If one of those
+	 */
 	public boolean isAuthorized(String enteredUserName, String pwToCheck) {
 
 		if (!userNameIsInDB(enteredUserName)) {
@@ -31,6 +38,12 @@ public class Validate {
 		return isPwCorrect;
 	}
 
+	/**
+	 * Method checks that the enteredUserName exists in the database.
+	 * 
+	 * @param enteredUserName
+	 * @return true if the userName exists
+	 */
 	private boolean userNameIsInDB(String enteredUserName) {
 
 		List<LoginUser> allUsers = userService.findAll();
@@ -45,6 +58,14 @@ public class Validate {
 		return false;
 	}
 
+	/**
+	 * Method checks that the enteredPW for the enteredUserName will get correct
+	 * hash when it is hashed with the saved UserSalt
+	 * 
+	 * @param enteredUserName
+	 * @param pwToCheck
+	 * @return true if the pw can genereate same hash as in db. Otherwise false.
+	 */
 	private boolean validatePassword(String enteredUserName, String pwToCheck) {
 
 		try {
@@ -55,11 +76,10 @@ public class Validate {
 
 			for (LoginUser userFromDb : allUsers) {
 				if (userFromDb.getName().equals(enteredUserName)) {
-					
+
 					String hashedPW = Digester.hashString(pwToCheck + userFromDb.getUserSalt());
 
 					if (userFromDb.getuserHashPw().equals(hashedPW)) {
-						System.out.println("hittat lösenordet");
 						return true;
 					}
 				}
@@ -69,25 +89,9 @@ public class Validate {
 
 		} catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
 			e.printStackTrace();
-
-			// TODO: Errorhandling
+			System.out.println("något gick fel med hashning");
 			return false;
 		}
 	}
-
-//	/**
-//	 * Method only for passing first step with hardcoded username & pw
-//	 * 
-//	 * @param pwString
-//	 * @return
-//	 */
-//	private static String initate(String pwString) {
-//		try {
-//			return Digester.hashString(pwString);
-//		} catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-//			e.printStackTrace();
-//		}
-//		return "fattas";
-//	}
 
 }

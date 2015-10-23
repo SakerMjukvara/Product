@@ -11,7 +11,12 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+/**
+ * Filter for the application. Implements the Filter interface
+ * 
+ * @author Lina
+ *
+ */
 public class AccessFilter implements Filter {
 
 	@Override
@@ -44,7 +49,6 @@ public class AccessFilter implements Filter {
 
 		System.out.println("method: " + method + " till sida " + requestURL + " INTE inloggad");
 		hre.setAttribute("error", "Du är inte inloggad");
-		//JESPER: nu kommer man till startsidan för din tomcat - inte till GoodProducts startsidan.
 		((HttpServletResponse) response).sendRedirect("/error");
 
 	}

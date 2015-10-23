@@ -65,7 +65,7 @@ public class FirstController {
 			model.addAttribute("error", "Fel inloggningsuppgifter.");
 			return home();
 		}
-
+		session.setMaxInactiveInterval(5*60);
 		session.setAttribute("loggedIn", true);
 		model.addAttribute("userName", name);
 		return "result";
@@ -137,17 +137,4 @@ public class FirstController {
 		return home();
 	}
 
-	//OKLART OM NEDAN ANVÄNDS BORTKOMMENTERAT SÅ LÄNGE
-//	/**
-//	 * Method that wi
-//	 * 
-//	 * @param session
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/result", method = RequestMethod.POST)
-//	public String result(HttpSession session, Model model) {
-//
-//		return "result";
-//	}
 }
