@@ -44,9 +44,8 @@ public class AccessFilter implements Filter {
 
 		System.out.println("method: " + method + " till sida " + requestURL + " INTE inloggad");
 		hre.setAttribute("error", "Du är inte inloggad");
-
-		((HttpServletResponse) response).sendRedirect("/");
-		// chain.doFilter(request, response);
+		//JESPER: nu kommer man till startsidan för din tomcat - inte till GoodProducts startsidan.
+		((HttpServletResponse) response).sendRedirect("/error");
 
 	}
 

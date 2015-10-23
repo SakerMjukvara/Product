@@ -58,18 +58,12 @@ public class CreateUser {
 	}
 
 	private boolean checkUserName(String name) {
-		boolean userExist = false;
 
 		LoginUser findUser = userService.findUser(name);
-
 		if (findUser != null) {
 			return true;
 		}
-		// if (findUser.getName().length() > 0) {
-		// userExist = true;
-		// }
-		// Send back text to web?????
-		return userExist;
+		return false;
 	}
 
 	private static byte[] createSalt() {
