@@ -8,6 +8,13 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Creates the user to be stored in the database
+ * 
+ * @author Jesper Nee
+ *
+ */
+
 @Component
 public class CreateUser {
 
@@ -39,6 +46,13 @@ public class CreateUser {
 
 	}
 
+	/**
+	 * Checks that the characters in username and password (whitelist)
+	 * @param text
+	 * This is the name or password the user put in
+	 * @return boolean
+	 * True if OK and false if not OK
+	 */
 	private boolean checkChars(String text) {
 		for (int i = 0; i < ACCEPTED_SIGNS.toCharArray().length; i++) {
 
@@ -56,16 +70,33 @@ public class CreateUser {
 		return true;
 
 	}
-
+/**
+ * Check that the choosen name is free to use (not in the database)
+ * @param name
+ * User choosen name
+ * @return boolean
+ * True if OK
+ */
 	private boolean checkUserName(String name) {
+		boolean userExist = false;
 
 		LoginUser findUser = userService.findUser(name);
+
 		if (findUser != null) {
 			return true;
 		}
-		return false;
+		// if (findUser.getName().length() > 0) {
+		// userExist = true;
+		// }
+		// Send back text to web?????
+		return userExist;
 	}
 
+	/**
+	 * Create a random salt for each new user
+	 * @return salt
+	 * The created salt value
+	 */
 	private static byte[] createSalt() {
 		final Random RANDOM = new SecureRandom();
 		byte[] salt = new byte[32];
@@ -73,6 +104,15 @@ public class CreateUser {
 		return salt;
 	}
 
+	/**
+	 * Create the hashed password (with salt) to store in the database
+	 * @param pw
+	 * Password from the user
+	 * @param salted
+	 * This is the salt value
+	 * @return hashedPW
+	 * The hashed salt + password to be stored in the database
+	 */
 	private static String createHashedPw(String pw, String salted) {
 		String hashedPW = null;
 		String toHash = pw + salted;
