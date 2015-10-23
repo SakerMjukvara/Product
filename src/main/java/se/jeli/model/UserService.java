@@ -5,38 +5,52 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Handles database queries
+ * 
+ * @author Jesper Nee
+ *
+ */
+
 @Component
 public class UserService {
 
 	private UserRepository repository;
 
-	// private List<User> users;
-
+	
 	@Autowired
 	public UserService(UserRepository repository) {
 		this.repository = repository;
 	}
 
-	// Insert new user into DB
+	/**
+	 * Insert new user into DB
+	 * @param user object
+	 * 
+	 */
+	
 	public void insertUser(LoginUser user) {
 		repository.save(user);
 
 	}
+	
+	/**
+	 * Fetch all users
+	 * @return user object
+	 */
 
 	public List<LoginUser> findAll() {
 		return (List<LoginUser>) repository.findAll();
 	}
 
-	// Fetch user from db. Get user object from DB OR look below for getting
-	// only values
-	public LoginUser findUser(LoginUser _user, UserRepository repository) {
-
-		LoginUser user = (LoginUser) repository.findByName(_user.getName());
-
-		return user;
-
-	}
-
+	/**
+	 * Find the user by name
+	 * 
+	 * @param userName
+	 * 
+	 * @return LoginUser object
+	 */
+	
 	public LoginUser findUser(String userName) {
 
 		List<LoginUser> findByName = repository.findByName(userName);

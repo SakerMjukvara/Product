@@ -2,6 +2,14 @@ package se.jeli.model;
 
 import javax.persistence.*;
 
+/**
+ * This is the user Entity. This object will be persisted in the database.
+ * 
+ * @author Jesper Nee
+ *
+ */
+
+
 @Entity
 @Table(name = "loginuser")
 public class LoginUser {

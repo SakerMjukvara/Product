@@ -4,6 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Create the hashed salt + password
+ * 
+ * @author Lina, Jesper Nee
+ *
+ */
+
 public class Digester {
 
 	public static String hashString(String pwToCheck) throws UnsupportedEncodingException, NoSuchAlgorithmException {
